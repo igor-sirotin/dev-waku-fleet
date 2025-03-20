@@ -22,22 +22,22 @@ services:
         aliases:
           - boot-1
 
-  boot-2:
-    build: .
-    command: >
-      --ports-shift=2
-      --dns4-domain-name=boot-2
-      --relay=true --filter=true --lightpush=true
-      --nodekey=6614c915de34312494de830b091296c6fe9d23932ece735906f6ae35fa084a6e
-      --staticnode="/dns4/boot-1/tcp/60001/p2p/16Uiu2HAmBNxLC9bS9sYovPWSiKNbA2baTiqFtgXVpcEh6tc7Vwnf"
-    ports:
-      - "60002:60002"
-      - "9002:9002"
-      - "8647:8647"
-    networks:
-      waku_net:
-        aliases:
-          - boot-2
+  # boot-2:
+  #   build: .
+  #   command: >
+  #     --ports-shift=2
+  #     --dns4-domain-name=boot-2
+  #     --relay=true --filter=true --lightpush=true
+  #     --nodekey=6614c915de34312494de830b091296c6fe9d23932ece735906f6ae35fa084a6e
+  #     --staticnode="/dns4/boot-1/tcp/60001/p2p/16Uiu2HAmBNxLC9bS9sYovPWSiKNbA2baTiqFtgXVpcEh6tc7Vwnf"
+  #   ports:
+  #     - "60002:60002"
+  #     - "9002:9002"
+  #     - "8647:8647"
+  #   networks:
+  #     waku_net:
+  #       aliases:
+  #         - boot-2
 
   lightpush-client:
     build: .
@@ -63,7 +63,7 @@ services:
       --dns4-domain-name=filter-client
       --filter=true --lightpush=true \
       --nodekey=e12dcbb36ea3c16430a59c2a982e3230c4a9e220dc548c3289fb5f18c2542dda
-      --filternode="/dns4/boot-2/tcp/60002/p2p/16Uiu2HAmAA1KYsrgkSg1pMQTCG4mP2Mz8Di97ECaKY7WEHzRn8AP"
+      --filternode="/dns4/boot-1/tcp/60001/p2p/16Uiu2HAmBNxLC9bS9sYovPWSiKNbA2baTiqFtgXVpcEh6tc7Vwnf"
     ports:
       - "60005:60005"
       - "9005:9005"
