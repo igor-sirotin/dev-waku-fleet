@@ -1,0 +1,92 @@
+version: '3.8'
+
+networks:
+  waku_net:
+    driver: bridge
+
+services:
+  boot-1:
+    build: .
+    command: >
+      --ports-shift=1
+      --dns4-domain-name=boot-1
+      --relay=true --filter=true --lightpush=true
+      --nodekey=6ea8cff88d7788f6466d006aee2982121705767096deb8b1c07e5f050760bd50
+      --staticnode="/dns4/boot-2/tcp/60002/p2p/16Uiu2HAmAA1KYsrgkSg1pMQTCG4mP2Mz8Di97ECaKY7WEHzRn8AP"
+    ports:
+      - "60001:60001"
+      - "9001:9001"
+      - "8646:8646"
+    networks:
+      waku_net:
+        aliases:
+          - boot-1
+
+  boot-2:
+    build: .
+    command: >
+      --ports-shift=2
+      --dns4-domain-name=boot-2
+      --relay=true --filter=true --lightpush=true
+      --nodekey=6614c915de34312494de830b091296c6fe9d23932ece735906f6ae35fa084a6e
+      --staticnode="/dns4/boot-1/tcp/60001/p2p/16Uiu2HAmBNxLC9bS9sYovPWSiKNbA2baTiqFtgXVpcEh6tc7Vwnf"
+    ports:
+      - "60002:60002"
+      - "9002:9002"
+      - "8647:8647"
+    networks:
+      waku_net:
+        aliases:
+          - boot-2
+
+  lightpush-client:
+    build: .
+    command: >
+      --ports-shift=4
+      --dns4-domain-name=lightpush-client
+      --relay=true --lightpush=true
+      --nodekey=8b1c07e5f050760bd506ea8cff88d7788f6466d006aee2982121705767096deb
+      --lightpushnode="/dns4/boot-1/tcp/60001/p2p/16Uiu2HAmBNxLC9bS9sYovPWSiKNbA2baTiqFtgXVpcEh6tc7Vwnf"
+    ports:
+      - "60004:60004"
+      - "9004:9004"
+      - "8649:8649"
+    networks:
+      waku_net:
+        aliases:
+          - lightpush-client
+
+  filter-client:
+    build: .
+    command: >
+      --ports-shift=5
+      --dns4-domain-name=filter-client
+      --filter=true --lightpush=true \
+      --nodekey=e12dcbb36ea3c16430a59c2a982e3230c4a9e220dc548c3289fb5f18c2542dda
+      --filternode="/dns4/boot-2/tcp/60002/p2p/16Uiu2HAmAA1KYsrgkSg1pMQTCG4mP2Mz8Di97ECaKY7WEHzRn8AP"
+    ports:
+      - "60005:60005"
+      - "9005:9005"
+      - "8650:8650"
+    networks:
+      waku_net:
+        aliases:
+          - filter-client
+
+  # store:
+  #   build: .
+  #   command: >
+  #     --ports-shift=3
+  #     --dns4-domain-name=store
+  #     --relay=true --store=true
+  #     --nodekey=04b74f7a299fbf2a313ba2260b8b15655393d19c14249b63b27a023ca1293941
+  #     --staticnode="/dns4/boot-1/tcp/60001/p2p/16Uiu2HAmBNxLC9bS9sYovPWSiKNbA2baTiqFtgXVpcEh6tc7Vwnf"
+  #     --staticnode="/dns4/boot-2/tcp/60002/p2p/16Uiu2HAmAA1KYsrgkSg1pMQTCG4mP2Mz8Di97ECaKY7WEHzRn8AP"
+  #   ports:
+  #     - "60003:60003"
+  #     - "9003:9003"
+  #     - "8648:8648"
+  #   networks:
+  #     waku_net:
+  #       aliases:
+  #         - store
